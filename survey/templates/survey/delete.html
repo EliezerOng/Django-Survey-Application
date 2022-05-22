@@ -1,0 +1,16 @@
+{% extends 'survey/base.html' %} 
+
+
+{% block content %}
+
+<p>Are you sure you want to delete "{{ item }}"?</p>
+
+<form method="POST" action="{% url 'survey:delete_question' item.id %}">
+
+    {% csrf_token %}
+    <a href="{% url 'survey:week_questions' week=week %}">Cancel</a>
+    <input type="submit" name="Confirm">
+</form>
+
+
+{% endblock %}

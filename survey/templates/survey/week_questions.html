@@ -1,0 +1,33 @@
+{% extends 'survey/base.html' %} {% block content %}
+
+<div>
+  <h1>Current Week: {{ week }}</h1>
+  <h2>{{ error }}</h2>
+</div>
+
+{% if user.is_authenticated %} {% for question in questions %}
+
+<div>
+  <p>
+    {{ question.question }} Average Score: {{ question.average_score }}
+    <a href="{% url 'survey:update_question' question.id %}">Edit</a>
+    <a href="{% url 'survey:delete_question' question.id %}">Delete</a>
+  </p>
+</div>
+
+{% endfor %}
+<a href="{% url 'survey:create_question' week=week %}">Create New Question</a>
+
+{% endif %} {% if not user.is_authenticated %} {% if questions %}
+<form method="POST">
+  {% csrf_token %} {% for question,form in questionForm %}
+
+  <div>
+    <p>{{ question.question }}</p>
+
+    {{ form }}
+  </div>
+  {% endfor %}
+  <input type="submit" />
+</form>
+{% endif %} {% endif %} {% endblock %}
