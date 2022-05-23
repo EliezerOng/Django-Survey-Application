@@ -77,24 +77,29 @@ def week_questions(request, week):
     if request.method == "POST":
         form = SurveyForm(request.POST)
         if form.is_valid():
-            for i in range(questionCount-1):
+            for i in range(questionCount):
                 var = 'form-' + str(i) + '-score'
                 score = request.POST.get(var , 0)
 
                 if score == 0:
                     continue
                 else:
+                    question = questions[i]
                     if score == 'option1':
+                        question.option_1_count += 1 
                         score = 1
                     elif score == 'option2':
+                        question.option_2_count += 1 
                         score = 2
                     elif score == 'option3':
+                        question.option_3_count += 1 
                         score = 3
                     elif score == 'option4':
+                        question.option_4_count += 1 
                         score = 4
                     else:
+                        question.option_5_count += 1 
                         score = 5
-                    question = questions[i]
                     question.total_responses += 1
                     question.total_score += score
                     question.average_score = (question.total_score / question.total_responses)
