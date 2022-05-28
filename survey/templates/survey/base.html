@@ -102,7 +102,7 @@
               >
             </li>
             {% if user.is_authenticated %}
-            <span class="navbar-text"> Logged in as {{user.username}} </span>
+            <span class="navbar-text mx-2" > Logged in as {{user.username}} </span>
             <form
               action="{% url 'survey:log_out' %}"
               method="POST"

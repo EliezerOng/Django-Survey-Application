@@ -24,5 +24,5 @@ class SurveyQuestion(models.Model):
     option_5_count = models.IntegerField(default=0)
 
     def __str__(self):
-        return f"Week: {self.week}, Question: {self.question}, Total Responses: {self.total_responses}, Total Score: {self.total_score}, Average Score: {self.average_score}" 
+        return f"Week: {self.week}, Question: {self.question}" 
 

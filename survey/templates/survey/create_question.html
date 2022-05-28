@@ -1,5 +1,7 @@
 {% extends 'survey/base.html' %} 
 
+{% load crispy_forms_tags %}
+
 
 {% block content %}
 
@@ -7,8 +9,10 @@
 <form action="" method="POST">
     {% csrf_token %}
 
-    {{ form }}
-    <input type="submit" name="Submit">
+    <div style="width:50%;" class="mx-5">
+        {{ form|crispy }}
+        <input type="submit" name="Submit" class="btn btn-success">
+    </div>
 
 </form>
 

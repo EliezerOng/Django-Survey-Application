@@ -1,5 +1,5 @@
 from sqlite3 import IntegrityError
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect , get_object_or_404
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.forms import User
 from django.db import IntegrityError
@@ -10,6 +10,8 @@ from django.forms import formset_factory
 from .forms import SurveyForm
 from django.urls import reverse
 from .forms import QuestionForm
+from django.http import JsonResponse
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 
@@ -131,7 +133,7 @@ def createQuestion(request, week):
 
 def updateQuestion(request,pk):
 
-    question = SurveyQuestion.objects.get(id=pk)
+    question = get_object_or_404(SurveyQuestion, pk=pk)
     form = QuestionForm(instance=question)
     week = question.week
 
@@ -145,7 +147,7 @@ def updateQuestion(request,pk):
 
 def deleteQuestion(request,pk):
 
-    question = SurveyQuestion.objects.get(id=pk)
+    question = get_object_or_404(SurveyQuestion, pk=pk)
     week = question.week
 
     if request.method == "POST":
@@ -153,3 +155,27 @@ def deleteQuestion(request,pk):
         return redirect(reverse('survey:week_questions', args=[week]))
 
     return render(request, 'survey/delete.html' , context={'item':question, 'week':week})
+
+@login_required
+def resultsData(request, obj):
+
+    votedata = []
+
+    question = SurveyQuestion.objects.get(id=obj)
+    option1 = question.option_1_count
+    option2 = question.option_2_count
+    option3 = question.option_3_count
+    option4 = question.option_4_count
+    option5 = question.option_5_count
+    votedata = {'1':option1,'2':option2,'3':option3,'4':option4,'5':option5}
+
+    return JsonResponse(votedata, safe=False)
+
+@login_required
+def resultsPage(request, obj):
+
+    question = get_object_or_404(SurveyQuestion, pk=obj)
+
+    week = question.week
+
+    return render(request, 'survey/results.html', {'question' : question ,'week' : week})

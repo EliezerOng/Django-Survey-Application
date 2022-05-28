@@ -1,33 +1,40 @@
-{% extends 'survey/base.html' %}
+{% extends 'survey/base.html' %} 
+{% load crispy_forms_tags %} 
 {% block content %}
-<h1>Sign up page</h1>
 
-<h3>{{ error }}</h3>
+<div class="container mt-5">
+  <div class="row d-flex justify-content-center">
+    <div class="col-md-5">
+      <div class="card px-5 py-5" id="form1">
+        <div class="text-center">
+          <h1 class="display-5 mb-4">Sign up</h1>
+          <p class="h3">{{ error }}</p>
+        </div>
 
-<form method="POST" action="">
-
-    {% csrf_token %}
-    <p>
-        {{form.username.label}}
-        {{form.username}}
-    </p>
-    <p>
-        <label for="email">Email </label>
-        <input type="email" id="email" name="email">
-    </p>
-    <p>
-        {{form.password1.label}}
-        {{form.password1}}
-    </p>
-    <p>
-        {{form.password2.label}}
-        {{form.password2}}
-    </p>
-    <p>
-        <input type="submit" value="Register">
-    </p>
-
-</form>
+        <form method="POST" action="">
+          {% csrf_token %}
+          <div><span>{{form.username|as_crispy_field}}</span></div>
+          <div class="mb-3">
+            <label for="email" class="form-label"
+              >Email</label
+            >
+            <input
+              type="email"
+              class="form-control"
+              id="email"
+              name="email"
+              placeholder="name@example.com"
+            />
+          </div>
+          <div><span>{{form.password1|as_crispy_field}}</span></div>
+          <div><span>{{form.password2|as_crispy_field}}</span></div>
+          <div class="mb-3">
+            <input type="submit" value="Register" class="form-control" />
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
 
 {% endblock %}
-

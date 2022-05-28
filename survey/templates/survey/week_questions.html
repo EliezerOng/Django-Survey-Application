@@ -1,33 +1,158 @@
-{% extends 'survey/base.html' %} {% block content %}
+{% extends 'survey/base.html' %} 
+{% load crispy_forms_tags %} 
+{% crispy survey-form %} 
+{% load static %} 
+{% block content %}
 
-<div>
-  <h1>Current Week: {{ week }}</h1>
-  <h2>{{ error }}</h2>
-</div>
+<script src="https://cdn.zingchart.com/zingchart.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
-{% if user.is_authenticated %} {% for question in questions %}
+<style>
+  #inlineRadio {
+    width: 100%;
+    margin: 0 auto;
+    text-align: center;
+  }
+  #inlineRadio > div {
+    display: inline-block;
+    width: 12%;
+    margin: 5px 2%;
+  }
+  #editImage {
+    max-height: 1.2em;
+    min-height: 0.5em;
+  }
 
-<div>
-  <p>
-    {{ question.question }} Average Score: {{ question.average_score }}
-    <a href="{% url 'survey:update_question' question.id %}">Edit</a>
-    <a href="{% url 'survey:delete_question' question.id %}">Delete</a>
-  </p>
-</div>
+  #deleteImage {
+    max-height: 1.2em;
+    min-height: 0.5em;
+  }
 
-{% endfor %}
-<a href="{% url 'survey:create_question' week=week %}">Create New Question</a>
+  #submitImage{
+    height:3em;
+    margin: auto;
+    display: block;
+  }
 
-{% endif %} {% if not user.is_authenticated %} {% if questions %}
-<form method="POST">
-  {% csrf_token %} {% for question,form in questionForm %}
+</style>
 
-  <div>
-    <p>{{ question.question }}</p>
+<div class="container mt-5">
+  <div class="row d-flex justify-content-center">
+    <div class="col-md-10">
+      <div class="card px-2 py-3" id="form1">
+        <div class="text-center">
+          <h1>Current Week: {{ week }}</h1>
+          <h2>{{ error }}</h2>
+        </div>
 
-    {{ form }}
+        {% if user.is_authenticated %} 
+        {% for question in questions %}
+        <div class="container mt-2">
+          <div class="row d-flex justify-content-center">
+            <div class="col-md-18">
+              <div class="card px-5 py-4">
+                <div id="question">
+                  <div class="fs-4" style="display: inline;">
+                    {{ question.question }}
+                  </div>
+                  <div style="display: inline; float: right; width: 3em;" id="icons" class="">
+                    <a href="{% url 'survey:update_question' question.id %}"
+                      ><img
+                        src="{% static 'survey/pen-to-square-solid.svg' %}"
+                        id="editImage"
+                    /></a>
+                    <a href="{% url 'survey:delete_question' question.id %}"
+                      ><img src="{% static 'survey/trash-solid.svg' %}" id="deleteImage"
+                    /></a>
+                  </div>
+                </div>
+                
+                <div class="fs-5 justify-content-center py-3" style="display: inline;">Average Score: {{ question.average_score|floatformat:2 }}</div>
+                <a href="{% url 'survey:resultspage' question.id %}" style="display: inline;" type="button" class="btn btn-secondary ">View Graph</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {% endfor %}
+        <a href="{% url 'survey:create_question' week=week %}" class="py-3 px-2">
+          <div class="form-control input-normal">
+              <img src="{% static 'survey/plus-solid.svg' %}" id="submitImage"/>
+          </div>
+        </a>
+
+        {% endif %} {% if not user.is_authenticated %} {% if questions %}
+        <div class="form-check py-3">
+          <form method="POST">
+            {% csrf_token %} {% for question,form in questionForm %}
+
+            <p class="h5">{{ question.question }}</p>
+
+            {% crispy form %} {% endfor %}
+            <input type="submit" class="form-control" />
+          </form>
+        </div>
+        {% endif %} 
+        {% endif %}
+      </div>
+    </div>
   </div>
-  {% endfor %}
-  <input type="submit" />
-</form>
-{% endif %} {% endif %} {% endblock %}
+</div>
+
+<!-- {% block scripts %}
+<script>
+
+    var state = {
+        'items':[],
+        'values':[],
+    }
+
+    var objId = $("#myChart").data("value")
+
+    console.log(objId)
+
+    var dataURL = `/survey/resultsdata/${objId}/`
+    $.ajax({
+        method:'GET',
+        url: dataURL,
+        success: function(response){
+            console.log('Response:' , response)
+            for(var i in response){
+
+                var key = Object.keys(response)[i-1]
+                var value = Object.values(response)[i-1]
+
+                state.items.push(key)
+                state.values.push(value)
+            }
+            console.log('STATE: ', state)
+            buildChart()
+        }
+    })
+
+    function buildChart(){
+
+      var chartData = {
+        "type":"bar",
+        "scale-x":{
+            "values": state.items
+        },
+        "series":[
+          {
+              "values": state.values
+          }
+        ]
+      }
+
+      zingchart.render({
+          id:"myChart",
+          data:chartData,
+          height: 500,
+          bgcolor :'red'
+      })
+      
+    }
+</script>
+{% endblock scripts %} -->
+
+{% endblock %}
