@@ -83,16 +83,14 @@
 
         {% endif %} {% if not user.is_authenticated %}
         {% if questions %}
-        <div class="form-check py-3">
-          <form method="POST">
-            {% csrf_token %} {% for question,form in questionForm %}
+            <form method="POST" class="form-check py-3 px-0">
+              {% csrf_token %} {% for question,form in questionForm %}
 
-            <p class="h5">{{ question.question }}</p>
+              <p class="h5">{{ question.question }}</p>
 
-            {% crispy form %} {% endfor %}
-            <input type="submit" class="form-control" />
-          </form>
-        </div>
+              {% crispy form %} {% endfor %}
+              <input type="submit" class="form-control"/>
+            </form>
         {% endif %} 
         {% endif %}
       </div>
