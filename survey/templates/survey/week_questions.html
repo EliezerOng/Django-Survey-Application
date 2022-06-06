@@ -83,7 +83,6 @@
 
         {% endif %} {% if not user.is_authenticated %}
         {% if questions %}
-        <h1>Shit</h1>
         <div class="form-check py-3">
           <form method="POST">
             {% csrf_token %} {% for question,form in questionForm %}
