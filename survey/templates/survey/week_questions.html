@@ -81,7 +81,8 @@
           </div>
         </a>
 
-        {% endif %} {% if not user.is_authenticated %} {% if questions %}
+        {% endif %} {% if not user.is_authenticated %}
+        {% if questions %}
         <div class="form-check py-3">
           <form method="POST">
             {% csrf_token %} {% for question,form in questionForm %}
@@ -99,60 +100,5 @@
   </div>
 </div>
 
-<!-- {% block scripts %}
-<script>
-
-    var state = {
-        'items':[],
-        'values':[],
-    }
-
-    var objId = $("#myChart").data("value")
-
-    console.log(objId)
-
-    var dataURL = `/survey/resultsdata/${objId}/`
-    $.ajax({
-        method:'GET',
-        url: dataURL,
-        success: function(response){
-            console.log('Response:' , response)
-            for(var i in response){
-
-                var key = Object.keys(response)[i-1]
-                var value = Object.values(response)[i-1]
-
-                state.items.push(key)
-                state.values.push(value)
-            }
-            console.log('STATE: ', state)
-            buildChart()
-        }
-    })
-
-    function buildChart(){
-
-      var chartData = {
-        "type":"bar",
-        "scale-x":{
-            "values": state.items
-        },
-        "series":[
-          {
-              "values": state.values
-          }
-        ]
-      }
-
-      zingchart.render({
-          id:"myChart",
-          data:chartData,
-          height: 500,
-          bgcolor :'red'
-      })
-      
-    }
-</script>
-{% endblock scripts %} -->
 
 {% endblock %}

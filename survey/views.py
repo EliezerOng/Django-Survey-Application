@@ -107,7 +107,7 @@ def week_questions(request, week):
                     question.average_score = (question.total_score / question.total_responses)
                     question.save()
 
-            return redirect(reverse('survey:home_page'))
+            return redirect(reverse('survey:thank_you'))
         else:
             print(form.errors)
             return render(request,'survey/week_questions.html', context={'questions' : questions, 'week' : week, 'questionForm' : questionForm})
