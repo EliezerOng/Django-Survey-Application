@@ -19,7 +19,7 @@ class SurveyForm(forms.Form):
         super(SurveyForm,self).__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.layout = Layout(
-            InlineRadios('score' , id='inlineRadio')
+            InlineRadios('score' , css_class='inlineRadio')
         )
         
         self.helper.form_tag = False
