@@ -1,6 +1,7 @@
+from importlib.metadata import files
 from django import forms
 from django.forms import ModelForm
-from .models import SurveyQuestion
+from .models import SurveyQuestion, Comment
 from crispy_forms.bootstrap import InlineRadios
 from crispy_forms.layout import Div,Layout
 from crispy_forms.helper import FormHelper
@@ -29,3 +30,11 @@ class QuestionForm(ModelForm):
         class Meta:
             model = SurveyQuestion
             fields = ['question']
+
+class CommentForm(ModelForm):
+    class Meta:
+        model = Comment
+        fields = ['comment']
+        labels = {
+            'comment' : ("Any questions/comments for the professor?")
+        }
