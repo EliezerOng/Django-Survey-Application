@@ -4,4 +4,8 @@
 __pycache__/
 local_settings.py
 /static/
+<<<<<<< HEAD
 db.sqlite3
+=======
+db.sqlite3
+>>>>>>> aab219fd2bbff54e914698cc01c0e29de9876782
