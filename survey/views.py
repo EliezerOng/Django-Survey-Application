@@ -29,7 +29,7 @@ def sign_up(request):
                                                     password=request.POST['password1'])
                     user.save()
                     login(request, user)
-                    return redirect('home_page')
+                    return redirect('survey:home_page')
 
                 except IntegrityError:
                     return render(request , 'survey/signup.html' , {'form': UserCreationForm()
