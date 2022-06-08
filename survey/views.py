@@ -5,9 +5,9 @@ from django.contrib.auth.forms import User
 from django.db import IntegrityError
 from django.contrib.auth import login,logout,authenticate
 from django.views.generic import CreateView
-from .models import SurveyQuestion,Week
+from .models import SurveyQuestion,Week,Comment
 from django.forms import formset_factory
-from .forms import SurveyForm
+from .forms import CommentForm, SurveyForm
 from django.urls import reverse
 from .forms import QuestionForm
 from django.http import JsonResponse
@@ -71,14 +71,21 @@ def week_questions(request, week):
     questions = SurveyQuestion.objects.filter(week=week).all()
     questionCount = SurveyQuestion.objects.count()
 
+    comments = Comment.objects.filter(week=week).all()
+
     SurveyFormSet = formset_factory(SurveyForm, extra=questionCount)
     formset =  SurveyFormSet()
 
     questionForm = zip(questions,formset)
 
+    commentForm = CommentForm()
+
     if request.method == "POST":
         form = SurveyForm(request.POST)
-        if form.is_valid():
+        comment = CommentForm(request.POST)
+        if form.is_valid() and comment.is_valid():
+            commentText = comment.cleaned_data['comment']
+            Comment.objects.create(comment=commentText,week=Week.objects.get(week_number=week))
             for i in range(questionCount):
                 var = 'form-' + str(i) + '-score'
                 score = request.POST.get(var , 0)
@@ -114,10 +121,11 @@ def week_questions(request, week):
 
     else:
         if questions:
-            return render(request,'survey/week_questions.html', context={'questions' : questions, 'week' : week, 'questionForm' : questionForm})
+            return render(request,'survey/week_questions.html', context={'questions' : questions, 'week' : week, 'questionForm' : questionForm
+                                                                        ,'comment' : commentForm, 'comments':comments})
         else:
-            return render(request,'survey/week_questions.html', context={'questions' : questions, 'week' : week, 'error':
-                                                                                                        'No questions for this week!'})
+            return render(request,'survey/week_questions.html', context={'questions' : questions, 'week' : week, 
+                                                        'error':'No questions for this week!','comment' : commentForm,'comments':comments})
 
 def createQuestion(request, week): 
 

@@ -33,6 +33,9 @@
     margin: auto;
     display: block;
   }
+  .asteriskField {
+    display: none;
+  }
 
 </style>
 
@@ -75,23 +78,38 @@
         </div>
 
         {% endfor %}
+        
         <a href="{% url 'survey:create_question' week=week %}" class="py-3 px-2">
           <div class="form-control input-normal">
               <img src="{% static 'survey/plus-solid.svg' %}" id="submitImage"/>
           </div>
         </a>
 
+        {% if comments %}
+        <div class="text-center">
+          <h2>Additional Comments:</h2>
+        </div>
+        {% for comment in comments %}
+          <div class="form-control mb-1">{{ comment }}</div>
+        {% endfor %}
+        {% endif %}
+
         {% endif %} {% if not user.is_authenticated %}
-        {% if questions %}
+
             <form method="POST" class="form-check py-3 px-0">
-              {% csrf_token %} {% for question,form in questionForm %}
+              {% csrf_token %} 
+              {% if questions %}
+              {% for question,form in questionForm %}
 
               <p class="h5">{{ question.question }}</p>
 
-              {% crispy form %} {% endfor %}
+              {% crispy form %} 
+              {% endfor %}
+              {% endif %} 
+              <div class="fw-light">{{ comment|crispy }}</div>
               <input type="submit" class="form-control"/>
             </form>
-        {% endif %} 
+
         {% endif %}
       </div>
     </div>

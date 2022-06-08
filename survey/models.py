@@ -26,3 +26,10 @@ class SurveyQuestion(models.Model):
     def __str__(self):
         return f"Week: {self.week}, Question: {self.question}" 
 
+class Comment(models.Model):
+
+    week = models.ForeignKey('Week',db_column='week_number', on_delete=models.CASCADE, default=1)
+    comment = models.TextField(max_length=500)
+
+    def __str__(self):
+        return f"Comment: {self.comment}" 
